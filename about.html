@@ -26,6 +26,59 @@
         .bg-gradient-card {
             background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
         }
+
+        /* Custom Scrollbar for Modal */
+        .modal-scroll::-webkit-scrollbar { width: 8px; }
+        .modal-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .modal-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Card Curve Effect */
+        .card-curve {
+            border-top-left-radius: 2rem;
+        }
+
+        /* Golden Glow for Leaders */
+        .leader-glow {
+            position: relative;
+        }
+        .leader-glow::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b, #d97706, #fbbf24);
+            border-radius: 1.7rem;
+            z-index: -1;
+            filter: blur(12px); /* เพิ่มความฟุ้ง */
+            opacity: 0.5;
+            animation: pulse-gold 3s infinite;
+        }
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        /* Shine Effect for Leaders */
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -183,7 +236,7 @@
                 </div>
             </div>
 
-            <!-- วัตถุประสงค์ (Colorful Full Width) -->
+            <!-- วัตถุประสงค์ -->
             <div class="bg-white/80 backdrop-blur-xl p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] shadow-2xl border border-white mb-24 relative overflow-hidden">
                 <!-- Decorative Circles -->
                 <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-100 rounded-full blur-3xl mix-blend-multiply"></div>
@@ -221,6 +274,97 @@
                     </div>
                 </div>
             </div>
+
+            <!-- =========================== -->
+            <!-- ทำเนียบทีมงาน (Team Directory) -->
+            <!-- =========================== -->
+            <div id="team-section" class="mb-24 relative z-20">
+                <div class="text-center mb-16">
+                    <span class="bg-cyan-100 text-cyan-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">Our Team</span>
+                    <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">ทำเนียบทีมงาน</h2>
+                    <p class="text-slate-500 text-lg max-w-2xl mx-auto">สารวัตรนักเรียนไซเบอร์และครูที่ปรึกษา ผู้ขับเคลื่อนโครงการ "โตไปไม่สูบ" ประจำปีการศึกษา 2568</p>
+                </div>
+
+                <!-- ครูที่ปรึกษา (Advisors) -->
+                <div class="mb-16">
+                    <h3 class="text-2xl font-bold text-slate-700 mb-8 border-l-4 border-cyan-500 pl-4">คณะครูที่ปรึกษา</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6" id="advisor-grid">
+                        <!-- JS จะสร้างการ์ดตรงนี้ -->
+                    </div>
+                </div>
+
+                <!-- Departments Container -->
+                <div id="departments-container" class="space-y-20">
+                     <!-- JS จะสร้างแผนกต่างๆ ลงในนี้ -->
+                </div>
+
+            </div>
+
+            <!-- Modal for Team Details (Popup) -->
+            <div id="team-modal" class="fixed inset-0 z-[100] hidden">
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+                
+                <!-- Modal Content -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-4 md:px-0">
+                    <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden relative flex flex-col md:flex-row max-h-[85vh] md:max-h-[600px]">
+                        
+                        <!-- Close Button -->
+                        <button onclick="closeModal()" class="absolute top-4 right-4 z-50 bg-white/20 hover:bg-white/40 backdrop-blur text-slate-800 md:text-white rounded-full p-2 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+
+                        <!-- Left: Image (Orange/Theme Background) -->
+                        <div id="modal-image-container" class="w-full md:w-5/12 bg-gradient-to-br from-cyan-400 to-blue-600 relative overflow-hidden flex items-end justify-center pt-10 transition-colors duration-500">
+                            <!-- Background Patterns -->
+                            <div class="absolute top-0 left-0 w-full h-full opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
+                            
+                            <img id="modal-img" src="" style="object-position: center 2%;" class="relative z-10 w-full object-cover object-top h-full md:h-auto max-h-[400px] md:max-h-full" alt="Team Member">
+                            
+                            <!-- Number Badge -->
+                            <div id="modal-number" class="absolute top-6 left-6 bg-white/90 backdrop-blur text-cyan-700 font-bold text-2xl w-12 h-12 rounded-xl flex items-center justify-center shadow-lg z-20">
+                                01
+                            </div>
+                        </div>
+
+                        <!-- Right: Details -->
+                        <div class="w-full md:w-7/12 p-8 md:p-10 overflow-y-auto modal-scroll bg-white">
+                            <div class="flex flex-col h-full justify-center">
+                                <div class="mb-2">
+                                    <span id="modal-role-badge" class="inline-block px-3 py-1 bg-cyan-100 text-cyan-700 rounded-lg text-xs font-bold tracking-wider mb-2">POSITION</span>
+                                </div>
+                                <h2 id="modal-name" class="text-3xl md:text-4xl font-bold text-slate-900 mb-1">ชื่อ นามสกุล</h2>
+                                <p id="modal-nickname" class="text-xl text-slate-500 font-medium mb-6">ชื่อเล่น</p>
+
+                                <div class="space-y-6">
+                                    <!-- Quote Section -->
+                                    <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-cyan-500 italic text-slate-600 relative">
+                                        <span class="absolute -top-3 -left-2 text-4xl text-cyan-200">"</span>
+                                        <p id="modal-motto" class="relative z-10">คติประจำใจหรือข้อความสั้นๆ</p>
+                                    </div>
+
+                                    <!-- Work/Duty Section -->
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 flex items-center gap-2 mb-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                            หน้าที่และความรับผิดชอบ
+                                        </h4>
+                                        <ul id="modal-duties" class="space-y-2 text-sm text-slate-600 list-disc list-inside marker:text-cyan-400">
+                                            <!-- JS populates this -->
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Social/Contact (Added FB/IG) -->
+                                    <div class="pt-4 mt-auto border-t border-slate-100 flex gap-4" id="modal-socials">
+                                        <!-- JS will inject buttons here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Contact Section -->
             <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[3rem] md:rounded-[4rem] p-8 md:p-24 text-white text-center relative overflow-hidden shadow-2xl ring-4 md:ring-8 ring-slate-50">
@@ -277,6 +421,341 @@
     <script>
         document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
         document.getElementById('close-mobile-menu')?.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+        // ==========================================
+        // TEAM DIRECTORY DATA & LOGIC
+        // ==========================================
+        
+        // Departments Configuration
+        const departments = [
+            {
+                title: "คณะแกนนำสารวัตรนักเรียนไซเบอร์",
+                ids: [1, 2, 3, 4],
+                themeColor: "amber",
+                gradient: "from-amber-400 to-orange-500",
+                borderColor: "border-l-4 border-amber-500",
+                isCore: true
+            },
+            {
+                title: "ฝ่ายประชาสัมพันธ์และสื่อสร้างสรรค์",
+                ids: [5, 6, 7],
+                themeColor: "emerald",
+                gradient: "from-emerald-400 to-teal-500",
+                borderColor: "border-l-4 border-emerald-500"
+            },
+            {
+                title: "ฝ่ายปฏิคมและงานบริการ",
+                ids: [8, 9],
+                themeColor: "pink",
+                gradient: "from-pink-400 to-rose-500",
+                borderColor: "border-l-4 border-pink-500"
+            },
+            {
+                title: "ฝ่ายนวัตกรรมและเทคโนโลยี",
+                ids: [10, 11],
+                themeColor: "violet",
+                gradient: "from-violet-400 to-purple-500",
+                borderColor: "border-l-4 border-violet-500"
+            },
+            {
+                title: "ฝ่ายอาคารและสิ่งแวดล้อมโรงเรียน",
+                ids: [12, 13],
+                themeColor: "cyan",
+                gradient: "from-cyan-400 to-sky-500",
+                borderColor: "border-l-4 border-cyan-500"
+            },
+            {
+                title: "ฝ่ายกิจกรรมและพลังสร้างสรรค์",
+                ids: [14, 15],
+                themeColor: "indigo",
+                gradient: "from-indigo-400 to-blue-600",
+                borderColor: "border-l-4 border-indigo-500"
+            }
+        ];
+
+        // 1. ข้อมูลครูที่ปรึกษา (2 ท่าน)
+        const advisors = [
+            {
+                id: 't1',
+                name: "ครูที่ปรึกษา ท่านที่ 1",
+                role: "ครูที่ปรึกษาโครงการ",
+                img: "https://placehold.co/400x500/3b82f6/ffffff?text=Advisor+1",
+                motto: "สร้างภูมิคุ้มกัน ให้เด็กไทยห่างไกลบุหรี่",
+                duties: ["ให้คำปรึกษาการดำเนินงาน", "ประสานงานเครือข่ายภายนอก", "ดูแลความเรียบร้อยของกิจกรรม"],
+                fb: "https://facebook.com",
+                ig: ""
+            },
+            {
+                id: 't2',
+                name: "ครูที่ปรึกษา ท่านที่ 2",
+                role: "ครูที่ปรึกษาโครงการ",
+                img: "https://placehold.co/400x500/06b6d4/ffffff?text=Advisor+2",
+                motto: "โรงเรียนปลอดภัย เริ่มต้นที่ความใส่ใจของเรา",
+                duties: ["สนับสนุนด้านสื่อและนวัตกรรม", "ดูแลสวัสดิภาพนักเรียนแกนนำ", "ประเมินผลโครงการ"],
+                fb: "",
+                ig: "https://instagram.com"
+            }
+        ];
+
+        // 2. ข้อมูลนักเรียน (15 คน) - ใส่ Link FB/IG ตรงนี้
+        const students = [
+            {
+                id: 1,
+                name: "นายกันตภณ วงศ์พรต",
+                nickname: "ชื่อเล่น",
+                role: "ประธานสารวัตรนักเรียนไซเบอร์",
+                img: "https://placehold.co/400x500/f59e0b/ffffff?text=Head+1",
+                motto: "ผู้นำที่ดี คือผู้รับฟังที่ดีที่สุด",
+                duties: ["วางแผนกลยุทธ์โครงการ", "บริหารจัดการทีมงาน", "เป็นตัวแทนประสานงานหลัก"],
+                fb: "https://facebook.com/yourprofile", // ใส่ลิ้งค์เฟสตรงนี้
+                ig: "https://instagram.com/yourprofile"  // ใส่ลิ้งค์ไอจีตรงนี้
+            },
+            {
+                id: 2,
+                name: "นายอชิระ สายวารี",
+                nickname: "ชื่อเล่น",
+                role: "รองประธานฝ่ายปฏิบัติการ",
+                img: "https://placehold.co/400x500/f59e0b/ffffff?text=Head+2",
+                motto: "ความสำเร็จเกิดจากความร่วมมือ",
+                duties: ["ดูแลฝ่ายเลขานุการ", "จัดตารางกิจกรรม", "สรุปผลการประชุม"],
+                fb: "",
+                ig: ""
+            },
+            {
+                id: 3,
+                name: "นางสาวกรวรรณ ศิริชล",
+                nickname: "ชื่อเล่น",
+                role: "รองประธานฝ่ายสื่อสารองค์กร",
+                img: "https://placehold.co/400x500/f59e0b/ffffff?text=Head+3",
+                motto: "สนุกกับงาน แล้วงานจะออกมาดี",
+                duties: ["ออกแบบกิจกรรมสร้างสรรค์", "ดูแลความสนุกหน้างาน", "ประสานงานสถานที่"],
+                fb: "",
+                ig: ""
+            },
+            {
+                id: 4,
+                name: "นางสาวธีรนาฎ ชิ้นพงค์",
+                nickname: "ชื่อเล่น",
+                role: "รองประธานฝ่ายบริหารกลาง",
+                img: "https://placehold.co/400x500/f59e0b/ffffff?text=Head+4",
+                motto: "สื่อสารดี มีชัยไปกว่าครึ่ง",
+                duties: ["ดูแลเพจและสื่อออนไลน์", "ผลิตคอนเทนต์ประชาสัมพันธ์", "ตอบคำถามน้องๆ"],
+                fb: "",
+                ig: ""
+            },
+            // --- PR (5-7) ---
+            { id: 5, name: "นางสาวบุญสิตา แก่นแก้ว", nickname: "ชื่อเล่น", role: "ฝ่ายประชาสัมพันธ์และสื่อสร้างสรรค์", img: "https://placehold.co/400x500/10b981/ffffff?text=PR+Team", motto: "Tech for good", duties: ["ดูแลระบบเว็บไซต์", "Support ด้านอุปกรณ์"], fb: "", ig: "" },
+            { id: 6, name: "นางสาววรนันท์ จิตตวงศ์ชวลิต", nickname: "ชื่อเล่น", role: "ฝ่ายประชาสัมพันธ์และสื่อสร้างสรรค์", img: "https://placehold.co/400x500/10b981/ffffff?text=PR+Team", motto: "ศิลปะสร้างโลกสวย", duties: ["ออกแบบโปสเตอร์", "ตกแต่งสถานที่"], fb: "", ig: "" },
+            { id: 7, name: "นางสาวณัฐพัชร์ แสงวิรุณทร์", nickname: "ชื่อเล่น", role: "ฝ่ายประชาสัมพันธ์และสื่อสร้างสรรค์", img: "https://placehold.co/400x500/10b981/ffffff?text=PR+Team", motto: "Creativity is key", duties: ["ถ่ายภาพ", "ตัดต่อวิดีโอ"], fb: "", ig: "" },
+            // --- Service (8-9) ---
+            { id: 8, name: "นางสาวแพรไหม มาศมาลัย", nickname: "ชื่อเล่น", role: "ฝ่ายปฏิคมและงานบริการ", img: "https://placehold.co/400x500/ec4899/ffffff?text=Service+Team", motto: "อิ่มท้อง สมองแล่น", duties: ["ดูแลอาหารและเครื่องดื่ม", "ปฐมพยาบาลเบื้องต้น"], fb: "", ig: "" },
+            { id: 9, name: "นายนิติธร จันทร์จำปา", nickname: "ชื่อเล่น", role: "ฝ่ายปฏิคมและงานบริการ", img: "https://placehold.co/400x500/ec4899/ffffff?text=Service+Team", motto: "Service with heart", duties: ["ดูแลความเรียบร้อย", "จัดเตรียมอุปกรณ์"], fb: "", ig: "" },
+            // --- Innovation (10-11) ---
+            { id: 10, name: "นายสรธร สุวรรณสะอาด", nickname: "ชื่อเล่น", role: "ฝ่ายนวัตกรรมและเทคโนโลยี", img: "https://placehold.co/400x500/8b5cf6/ffffff?text=Innovate+Team", motto: "ความรู้คู่คุณธรรม", duties: ["หาข้อมูลบุหรี่ไฟฟ้า", "จัดทำบอร์ดความรู้"], fb: "", ig: "" },
+            { id: 11, name: "นายปัณณวิชญ์ จันทร์แก้ว", nickname: "ชื่อเล่น", role: "ฝ่ายนวัตกรรมและเทคโนโลยี", img: "https://placehold.co/400x500/8b5cf6/ffffff?text=Innovate+Team", motto: "Fact check is must", duties: ["ตรวจสอบข้อมูล", "เขียนบทความ"], fb: "", ig: "" },
+            // --- Building (12-13) ---
+            { id: 12, name: "นายณรงค์ศักดิ์ ปานทอง", nickname: "ชื่อเล่น", role: "ฝ่ายอาคารและสิ่งแวดล้อมโรงเรียน", img: "https://placehold.co/400x500/06b6d4/ffffff?text=Build+Team", motto: "Connection is power", duties: ["ติดต่อวิทยากร", "ประสานครูประจำชั้น"], fb: "", ig: "" },
+            { id: 13, name: "นายวีรโชติ มณีโชติ", nickname: "ชื่อเล่น", role: "ฝ่ายอาคารและสิ่งแวดล้อมโรงเรียน", img: "https://placehold.co/400x500/06b6d4/ffffff?text=Build+Team", motto: "กฎระเบียบคือความสงบ", duties: ["สอดส่องดูแลพื้นที่", "รับเรื่องร้องเรียน"], fb: "", ig: "" },
+            // --- Activity (14-15) ---
+            { id: 14, name: "นายณธกร ชลสิทธิ์", nickname: "ชื่อเล่น", role: "ฝ่ายกิจกรรมและพลังสร้างสรรค์", img: "https://placehold.co/400x500/3b82f6/ffffff?text=Activity+Team", motto: "ดูแลด้วยใจ", duties: ["เดินรณรงค์", "ตักเตือนเพื่อนๆ"], fb: "", ig: "" },
+            { id: 15, name: "นายภูริทัช ควรกิจ", nickname: "ชื่อเล่น", role: "ฝ่ายกิจกรรมและพลังสร้างสรรค์", img: "https://placehold.co/400x500/3b82f6/ffffff?text=Activity+Team", motto: "จดทุกอย่างที่ขวางหน้า", duties: ["บันทึกการประชุม", "ทำหนังสือราชการ"], fb: "", ig: "" },
+        ];
+
+        // Helper: Find color gradient based on ID
+        function getGradientById(id) {
+            // Check Advisors
+            if(String(id).startsWith('t')) return "from-sky-400 to-blue-600";
+            
+            // Check Students via Departments
+            for (let dept of departments) {
+                if (dept.ids.includes(id)) return dept.gradient;
+            }
+            return "from-cyan-400 to-blue-500"; // Fallback
+        }
+
+        // Function สร้าง HTML การ์ด
+        function createCard(person, isAdvisor = false, customGradient = null, isCore = false) {
+            let bgGradient = isAdvisor 
+                ? "bg-gradient-to-t from-slate-200 to-white" 
+                : "bg-gradient-to-t from-slate-50 to-white";
+            
+            const roleColorClass = customGradient || getGradientById(person.id);
+            
+            // Core Team special sizing/effects (Added: shine-effect)
+            const containerClasses = isCore 
+                ? "h-full transform hover:-translate-y-3 transition-all duration-500 leader-glow ring-4 ring-amber-200 shadow-xl shine-effect" 
+                : "h-full transform hover:-translate-y-2 transition-all duration-300 shadow-lg";
+
+            const imageHeight = isCore 
+                ? "h-56 sm:h-80" 
+                : "h-48 sm:h-72";
+            
+            // Core Crown Icon
+            const crownBadge = isCore 
+                ? `<div class="absolute top-2 left-2 sm:top-4 sm:left-4 z-20 text-3xl sm:text-4xl filter drop-shadow-md animate-bounce" style="animation-duration: 3s;">👑</div>` 
+                : '';
+
+            return `
+            <div onclick="openModal('${person.id}')" class="group relative cursor-pointer ${isCore ? 'z-10' : ''}">
+                <!-- Card Container -->
+                <div class="rounded-3xl overflow-hidden ${bgGradient} border border-white relative flex flex-col ${containerClasses}">
+                    
+                    <!-- Image Area -->
+                    <div class="${imageHeight} w-full bg-gradient-to-b ${roleColorClass} relative flex items-end justify-center overflow-hidden shrink-0">
+                        <!-- Crown for Leader -->
+                        ${crownBadge}
+
+                        <!-- Number Badge -->
+                        <div class="absolute top-2 right-2 sm:top-4 sm:right-4 bg-white/90 backdrop-blur text-slate-700 font-bold text-sm sm:text-base w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center shadow-md z-20">
+                            ${isAdvisor ? 'T' : person.id}
+                        </div>
+                        
+                        <!-- Person Image -->
+                        <!-- ดันรูปขึ้นบนด้วย object-[center_0%] (โฟกัสช่วงบนมากขึ้น) -->
+                        <img src="${person.img}" alt="${person.name}" style="object-position: center 2%;" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                        
+                        <!-- Gradient Overlay -->
+                        <div class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    </div>
+
+                    <!-- Name Plate -->
+                    <div class="relative flex-1 bg-transparent mt-[-1rem] z-10 pointer-events-none">
+                        <div class="bg-white pt-2 pb-2 px-2 sm:pt-4 sm:pb-4 sm:px-4 card-curve mr-2 sm:mr-4 mb-2 sm:mb-4 rounded-br-3xl shadow-lg min-h-[5.5rem] sm:min-h-[6.5rem] flex flex-col justify-center">
+                            <h4 class="${isCore ? 'text-sm sm:text-lg' : 'text-[0.7rem] sm:text-[0.95rem]'} font-bold leading-tight text-slate-800 group-hover:text-blue-600 transition break-words">
+                                ${person.name}
+                            </h4>
+                            <p class="text-[9px] sm:text-xs text-slate-500 font-light mt-1 leading-snug">${person.role}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        // Render Cards with Department Separation
+        function renderTeam() {
+            const advisorGrid = document.getElementById('advisor-grid');
+            const departmentsContainer = document.getElementById('departments-container');
+
+            // 1. Render Advisors (Existing)
+            advisorGrid.innerHTML = "";
+            advisors.forEach(p => {
+                advisorGrid.innerHTML += createCard(p, true);
+            });
+
+            // 2. Render Student Departments
+            departmentsContainer.innerHTML = "";
+            
+            departments.forEach(dept => {
+                const count = dept.ids.length;
+                // ปรับขนาดการ์ดของฝ่ายอื่นๆ ให้เล็กลงในหน้าจอมือถือและ desktop
+                // ใช้ grid-cols-2 หรือ grid-cols-3 บนหน้าจอใหญ่ แทนที่จะเป็น grid-cols-4 เพื่อให้การ์ดดูใหญ่ขึ้นเล็กน้อย (ถ้าต้องการ) หรือปรับ gap
+                // แต่โจทย์บอก "ขอฝ่ายอื่นขอขนาดเล็กลงอีกหน่อย ให้เท่ากับของ head ตอนนี้มันกว้างเกิน" 
+                // ซึ่งปกติตอนนี้ head ก็ใช้ grid-cols-2 หรือ 4 เหมือนกัน แต่ head มีเอฟเฟกต์ทำให้ดูใหญ่
+                // ดังนั้นจะลองปรับ grid ของฝ่ายอื่นให้เหมาะสม (อาจเพิ่มจำนวนคอลัมน์เพื่อให้การ์ดเล็กลง)
+                
+                let gridClass = "grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-6"; // เพิ่มคอลัมน์เพื่อให้การ์ดเล็กลง
+                
+                if (dept.isCore) {
+                     // Head ยังคงใหญ่
+                     gridClass = "grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-4 sm:gap-8";
+                } else {
+                    // ฝ่ายอื่นๆ ปรับให้เล็กลงโดยเพิ่มจำนวนคอลัมน์ใน grid
+                    if (count <= 3) gridClass = "grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 max-w-4xl mx-auto";
+                    else gridClass = "grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+                }
+
+                const titleStyle = dept.isCore 
+                    ? "text-xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600 drop-shadow-sm" 
+                    : "text-lg sm:text-2xl font-bold text-slate-700";
+                
+                const borderStyle = dept.isCore
+                    ? "border-l-4 sm:border-l-8 border-amber-500 pl-4 sm:pl-6"
+                    : `border-l-4 ${dept.borderColor.split(' ')[1]} pl-3 sm:pl-4`;
+
+                const sectionHTML = `
+                    <div class="department-section animate-fade-in-up">
+                        <div class="mb-6 sm:mb-8 ${borderStyle}">
+                            <h3 class="${titleStyle}">${dept.title}</h3>
+                        </div>
+                        <div class="grid ${gridClass}">
+                            ${dept.ids.map(id => {
+                                const member = students.find(s => s.id === id);
+                                return member ? createCard(member, false, dept.gradient, dept.isCore) : '';
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+                departmentsContainer.innerHTML += sectionHTML;
+            });
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('team-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalImageContainer = document.getElementById('modal-image-container');
+        const modalName = document.getElementById('modal-name');
+        const modalNickname = document.getElementById('modal-nickname');
+        const modalRoleBadge = document.getElementById('modal-role-badge');
+        const modalMotto = document.getElementById('modal-motto');
+        const modalDuties = document.getElementById('modal-duties');
+        const modalNumber = document.getElementById('modal-number');
+        const modalSocials = document.getElementById('modal-socials'); // New
+
+        function openModal(id) {
+            let person = students.find(s => s.id == id);
+            let isAdvisor = false;
+            if (!person) {
+                person = advisors.find(a => a.id == id);
+                isAdvisor = true;
+            }
+
+            if(person) {
+                const roleColorClass = getGradientById(person.id);
+                modalImageContainer.className = `w-full md:w-5/12 bg-gradient-to-br ${roleColorClass} relative overflow-hidden flex items-end justify-center pt-10 transition-colors duration-500`;
+
+                modalImg.src = person.img;
+                modalName.innerText = person.name;
+                modalNickname.innerText = isAdvisor ? 'ครูที่ปรึกษา' : `ชื่อเล่น: ${person.nickname}`;
+                modalRoleBadge.innerText = person.role;
+                modalMotto.innerText = person.motto;
+                modalNumber.innerText = isAdvisor ? 'T' : person.id;
+                
+                modalDuties.innerHTML = "";
+                person.duties.forEach(duty => {
+                    modalDuties.innerHTML += `<li>${duty}</li>`;
+                });
+
+                // Inject Social Media Buttons
+                let socialsHTML = "";
+                if (person.fb) {
+                    socialsHTML += `
+                    <a href="${person.fb}" target="_blank" class="text-slate-400 hover:text-blue-600 transition flex items-center gap-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        <span class="text-sm font-bold">Facebook</span>
+                    </a>`;
+                }
+                if (person.ig) {
+                    socialsHTML += `
+                    <a href="${person.ig}" target="_blank" class="text-slate-400 hover:text-pink-600 transition flex items-center gap-1">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        <span class="text-sm font-bold">Instagram</span>
+                    </a>`;
+                }
+                modalSocials.innerHTML = socialsHTML;
+
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        renderTeam();
+
     </script>
 </body>
 </html>
