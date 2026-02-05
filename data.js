@@ -18,7 +18,7 @@ const newsData = [
 const activityData = [
     { 
         id: 'a2',
-        type: 'recruitment',
+        type: 'recruitment', //ongoing
         status: 'closed',    // ตัวอย่าง: ปิดรับสมัครแล้ว
         title: "MINI HACKATHON: THE OPERATOR 🕵️‍♂️", 
         images: ["img/33.jpg"], 
